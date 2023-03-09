@@ -1,14 +1,34 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse, get_object_or_404
+from django.http import HttpResponseRedirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User, Group
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, viewsets, permissions, status
-from .serializers import UserSerializer, GroupSerializer, RegisterSerializer, LoginSerializer
+from .serializers import UserSerializer, GroupSerializer, RegisterSerializer, LoginSerializer, RoomSerializer
+from .models import Room
 
 # Create your views here.
 def index(request):
+    if request.method == "POST":
+        name = request.POST.get("name", None)
+        if name:
+            room = Room.objects.create(name=name, host=request.user)
+            HttpResponseRedirect(reverse("room", args=[room.pk]))
     return render(request, 'index.html')
+
+def room(request, pk):
+    room: Room = get_object_or_404(Room, pk=pk)
+    return render(request, 'room.html', {
+        "room":room,
+    })
+
+
+class RoomViewSet(viewsets.ModelViewSet):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """

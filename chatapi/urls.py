@@ -7,11 +7,13 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
+router.register(r'rooms', views.RoomViewSet)
 
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('test/', views.index),
+    path('test/', views.index, name='index'),
+    path('test/room/<int:pk>/', views.room, name='room'),
     path('login/', views.LoginView.as_view()),
     path('register/', views.RegisterView.as_view())
 ]
