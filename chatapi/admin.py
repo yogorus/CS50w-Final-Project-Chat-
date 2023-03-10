@@ -1,6 +1,7 @@
 from django.contrib import admin
-# from djangochat.chatapi.models import 
+from .models import Room, Message
 
 # Register your models here.
 
-# admin.site.register()
+admin.site.register(Room)
+admin.site.register(Message)
