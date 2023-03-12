@@ -10,18 +10,11 @@ from .models import Room
 
 # Create your views here.
 def index(request):
-    if request.method == "POST":
-        name = request.POST.get("name", None)
-        if name:
-            room = Room.objects.create(name=name, host=request.user)
-            HttpResponseRedirect(reverse("room", args=[room.pk]))
-    return render(request, 'index.html')
+    return render(request, "chat/index.html")
 
-def room(request, pk):
-    room: Room = get_object_or_404(Room, pk=pk)
-    return render(request, 'room.html', {
-        "room":room,
-    })
+
+def room(request, room_name):
+    return render(request, "chat/room.html", {"room_name": room_name})
 
 
 class RoomViewSet(viewsets.ModelViewSet):

@@ -12,8 +12,8 @@ router.register(r'rooms', views.RoomViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('test/', views.index, name='index'),
-    path('test/room/<int:pk>/', views.room, name='room'),
+    path('chat/', views.index, name='index'),
+     path("chat/<str:room_name>/", views.room, name="room"),
     path('login/', views.LoginView.as_view()),
     path('register/', views.RegisterView.as_view())
 ]
