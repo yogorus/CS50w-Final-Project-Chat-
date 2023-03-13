@@ -16,7 +16,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
         await self.accept()
-        await self.send.get_room_messages(pk=1)
+        
+        # Send chat history
+        messages = await self.get_room_messages(pk=self.room_name)
+        await self.send(messages)
 
     async def disconnect(self, close_code):
         # Leave room group
@@ -35,10 +38,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from room group
     async def chat_message(self, event):
         message = event["message"]
-        user = await self.get_user()
+        # user = await self.get_user()
         
         # Send message to WebSocket
-        await self.send(text_data=json.dumps({"message": message, "user": user}))
+        await self.send(text_data=json.dumps({"message": message}))
     
     @database_sync_to_async
     def get_user(self):
@@ -57,5 +60,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_room_messages(self, pk):
         room = get_object_or_404(Room, pk=pk)
-        serializer = RoomSerializer(room)
-        return serializer.data.messages
+        messages = RoomSerializer(room).get_messages()
+        return json.dumps(messages)

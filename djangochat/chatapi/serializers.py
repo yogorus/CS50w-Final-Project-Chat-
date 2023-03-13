@@ -66,3 +66,6 @@ class RoomSerializer(serializers.ModelSerializer):
         model = Room
         fields = '__all__'
         read_only_fields = ['messages']
+    
+    def get_messages(self):
+        return self.data["messages"]

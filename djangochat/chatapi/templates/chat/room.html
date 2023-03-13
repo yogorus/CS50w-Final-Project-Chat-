@@ -22,14 +22,22 @@
         );
 
         chatSocket.onopen = (e) => {
-            const messages = JSON.parse(e.data);
-            console.log(messages);
+            // const messages = JSON.parse(e.data);
+            document.querySelector('#chat-log').value = '';
+            console.log(e.data);
         };
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             console.log(data)
-            document.querySelector('#chat-log').value += (data.user.username + ': ' + data.message + '\n');
+            if (Array.isArray(data)) {
+                data.forEach(e => {
+                    const message = e;
+                    document.querySelector('#chat-log').value += (message.text + '\n')
+                })
+            } else {
+                document.querySelector('#chat-log').value += (data.message + '\n');
+            } 
         };
 
         chatSocket.onclose = function(e) {

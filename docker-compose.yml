@@ -8,8 +8,8 @@ services:
           POSTGRES_HOST_AUTH_METHOD: "trust"
 
     web:
-        build: .
+        build: ./djangochat
         volumes:
-            - .:/usr/src/app
+            - ./djangochat:/usr/src/app/
         ports:
             - "8000:8000"
