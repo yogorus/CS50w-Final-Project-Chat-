@@ -52,7 +52,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(read_only=True)
     
     class Meta:
         model = Message

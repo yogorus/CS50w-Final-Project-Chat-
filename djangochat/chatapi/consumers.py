@@ -3,6 +3,7 @@ import json
 from .serializers import UserSerializer, MessageSerializer, RoomSerializer
 from .models import Room, Message
 
+from rest_framework.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
@@ -18,7 +19,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.accept()
         
         # Send chat history
-        messages = await self.get_room_messages(pk=self.room_name)
+        room = await self.get_room_model(self.room_name)
+        messages = await self.get_room_messages(room)
         await self.send(messages)
 
     async def disconnect(self, close_code):
@@ -37,28 +39,47 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     # Receive message from room group
     async def chat_message(self, event):
-        message = event["message"]
-        # user = await self.get_user()
+        room = await self.get_room_model(self.room_name)
+        data = {
+            "text": event["message"],
+            "room": room.id
+        }
+        try:
+            message = await self.create_message(data)
+
+            # Send message to WebSocket
+            await self.send(text_data=json.dumps({"message": message}))
         
-        # Send message to WebSocket
-        await self.send(text_data=json.dumps({"message": message}))
+        except ValidationError:
+            pass
+    
+    # @database_sync_to_async
+    # def get_user(self):
+    #     user = self.scope["user"]
+    #     return UserSerializer(user)
     
     @database_sync_to_async
-    def get_user(self):
-        user = self.scope["user"]
-        return UserSerializer(user).data
-    
-    @database_sync_to_async
-    def create_message(self):
-        user = self.scope["user"]
+    def create_message(self, data):
+        message_serializer = MessageSerializer(data=data)
+        message_serializer.is_valid(raise_exception=True)
         
-
+        message = Message.objects.create(
+            user = self.scope['user'],
+            room = message_serializer.validated_data['room'],
+            text = message_serializer.validated_data['text']
+        )
+        
+        return MessageSerializer(message).data
+        
     @database_sync_to_async
-    def get_message(self):
-        pass
-
-    @database_sync_to_async
-    def get_room_messages(self, pk):
-        room = get_object_or_404(Room, pk=pk)
+    def get_room_messages(self, room):
+        # room = get_object_or_404(Room, pk=pk)
         messages = RoomSerializer(room).get_messages()
         return json.dumps(messages)
+    
+    @database_sync_to_async
+    def get_room_model(self, name):
+        return get_object_or_404(Room, name=name)
+
+        
+
