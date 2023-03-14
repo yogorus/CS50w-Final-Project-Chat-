@@ -13,15 +13,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = "chat_%s" % self.room_name
 
-        # Join room group
-        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        if self.scope['user'].is_authenticated:
+            # Join room group
+            await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
-        await self.accept()
-        
-        # Send chat history
-        room = await self.get_room_model(self.room_name)
-        messages = await self.get_room_messages(room)
-        await self.send(messages)
+            await self.accept()
+            
+            # Send chat history
+            room = await self.get_room_model(self.room_name)
+            messages = await self.get_room_messages(room)
+            await self.send(messages)
 
     async def disconnect(self, close_code):
         # Leave room group
