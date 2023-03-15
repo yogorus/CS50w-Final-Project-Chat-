@@ -18,3 +18,17 @@ services:
             - "8000:8000"
         # depends_on:
         #     - db
+    
+    frontend:
+        build: 
+            context: ./frontend
+            dockerfile: Dockerfile
+        
+        volumes:
+            - ./frontend:/usr/src/app/frontend
+        ports:
+            - "3000:3000"    
+
+        depends_on:
+            - web
+            
