@@ -41,11 +41,14 @@ INSTALLED_APPS = [
 
     'channels',
     'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
 
     'chatapi.apps.ChatapiConfig'    
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -135,6 +138,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES':[
+#         'rest_framework.authentication.SessionAuthentication',
+#     ],
     'DEFAULT_PERMISSION_CLASSES': [
     'rest_framework.permissions.IsAuthenticated',
     ], 
@@ -143,3 +149,12 @@ REST_FRAMEWORK = {
 #     'rest_framework.authentication.SessionAuthentication',
 # )
 }
+# CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]

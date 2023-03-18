@@ -11,6 +11,10 @@
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
     <script>
+        {% comment %} fetch("http://localhost:8000/login_check")
+        .then(response => {
+            console.log(response)
+        }) {% endcomment %}
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
         const chatSocket = new WebSocket(
@@ -30,8 +34,8 @@
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             console.log(data)
-            if (Array.isArray(data)) {
-                data.forEach(e => {
+            if (data.type === 'load_messages') {
+                data.messages.forEach(e => {
                     const message = e;
                     document.querySelector('#chat-log').value += (message.text + '\n')
                 })

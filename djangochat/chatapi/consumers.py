@@ -22,7 +22,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # Send chat history
             room = await self.get_room_model(self.room_name)
             messages = await self.get_room_messages(room)
-            await self.send(messages)
+            await self.send(json.dumps({'type': 'load_messages', 'messages': messages}))
 
     async def disconnect(self, close_code):
         # Leave room group
@@ -49,7 +49,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             message = await self.create_message(data)
 
             # Send message to WebSocket
-            await self.send(text_data=json.dumps({"message": message}))
+            await self.send(text_data=json.dumps({'type': 'chat_message', "message": message}))
         
         except ValidationError:
             pass
@@ -76,7 +76,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def get_room_messages(self, room):
         # room = get_object_or_404(Room, pk=pk)
         messages = RoomSerializer(room).get_messages()
-        return json.dumps(messages)
+        return messages
     
     @database_sync_to_async
     def get_room_model(self, name):
