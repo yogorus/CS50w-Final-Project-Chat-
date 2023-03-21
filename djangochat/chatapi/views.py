@@ -81,7 +81,7 @@ class LoginCheckView(APIView):
 
 
 class CustomAuthToken(ObtainAuthToken):
-    # permission_classes = [permissions.AllowAny, ]
+    permission_classes = [permissions.AllowAny, ]
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,

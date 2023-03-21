@@ -1,5 +1,6 @@
 import {React, useState, useEffect }from 'react';
 import getCookie from '../utils/getCookie';
+
 export default function LoginForm() {
     const [state, setState] = useState({
         'username': '',
@@ -32,6 +33,7 @@ export default function LoginForm() {
         })
         response = await response.json()
         console.log(response)
+        window.localStorage.setItem("token", JSON.stringify(response.token));
     }
 
     return(

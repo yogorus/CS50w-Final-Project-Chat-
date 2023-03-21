@@ -2,12 +2,14 @@ import logo from '../logo.svg';
 import '../App.css';
 import getCookie from '../utils/getCookie';
 import LoginForm from './LoginForm';
+import Home from './Home';
 import React from 'react';
 import {
   Browser,
   BrowserRouter,
   Routes,
   Route,
+  Navigate,
   Switch
 } from "react-router-dom";
 import { useEffect, useState } from 'react';
@@ -38,7 +40,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/login' element={<LoginForm />} />
+        <Route path="/" />
+          <Route index element={isLoggedIn ? <Home /> : <Navigate to='login'/>} />
+          <Route path='login' element={<LoginForm />} />
       </Routes>
     </BrowserRouter>
   );
