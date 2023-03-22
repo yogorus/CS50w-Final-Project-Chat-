@@ -1,7 +1,9 @@
 import {React, useState, useEffect }from 'react';
+import { useNavigate } from 'react-router-dom';
 import getCookie from '../utils/getCookie';
 
 export default function LoginForm() {
+    let navigate = useNavigate();
     const [state, setState] = useState({
         'username': '',
         'password': ''
@@ -19,6 +21,7 @@ export default function LoginForm() {
 
     async function logUserIn(e) {
         e.preventDefault();
+        // Log user in via obtaining DRF auth token
         const url = 'http://localhost:8000/api-token-auth/';
         const csrftoken = getCookie('csrftoken');
         const data = {username: state.username, password: state.password};
@@ -33,7 +36,12 @@ export default function LoginForm() {
         })
         response = await response.json()
         console.log(response)
-        window.localStorage.setItem("token", JSON.stringify(response.token));
+        // If response returned auth token, we're safe to redirect the user
+        if ('token' in response)
+        {
+            window.localStorage.setItem("token", JSON.stringify(response.token));
+            navigate('/')
+        }
     }
 
     return(

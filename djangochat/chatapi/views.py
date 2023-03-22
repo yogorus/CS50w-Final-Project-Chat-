@@ -34,22 +34,22 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class LoginView(generics.GenericAPIView):
-    permission_classes = (permissions.AllowAny,)
-    serializer_class = LoginSerializer
+# class LoginView(generics.GenericAPIView):
+#     permission_classes = (permissions.AllowAny,)
+#     serializer_class = LoginSerializer
     
-    def post(self, request, format=None):
-        # serializer = LoginSerializer(data=request.data)
-        # if serializer.is_valid():
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(username=username, password=password)
+#     def post(self, request, format=None):
+#         # serializer = LoginSerializer(data=request.data)
+#         # if serializer.is_valid():
+#         username = request.data.get('username')
+#         password = request.data.get('password')
+#         user = authenticate(username=username, password=password)
 
-        if user:
-            login(request, user)
-            return Response({'message': 'logged in!'}, status=status.HTTP_200_OK)
+#         if user:
+#             login(request, user)
+#             return Response({'message': 'logged in!'}, status=status.HTTP_200_OK)
         
-        return Response({'error': 'invalid username/password'})
+#         return Response({'error': 'invalid username/password'})
             
         # return Response({'error': 'invalid data'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -69,15 +69,15 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class LoginCheckView(APIView):
-    permission_classes = [permissions.AllowAny]
+# class LoginCheckView(APIView):
+#     permission_classes = [permissions.AllowAny]
     
-    def get(self, request):
+#     def get(self, request):
         
-        if request.user.is_authenticated:
-            return Response({'message':'authorized', "username": request.user.username}, status=status.HTTP_200_OK)
+#         if request.user.is_authenticated:
+#             return Response({'message':'authorized', "username": request.user.username}, status=status.HTTP_200_OK)
 
-        return Response({'message:' 'unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+#         return Response({'message:' 'unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -93,5 +93,5 @@ class CustomAuthToken(ObtainAuthToken):
             'token': token.key,
             'user_id': user.pk,
             'username': user.username,
-            'email': user.email
+            # 'email': user.email
         })
