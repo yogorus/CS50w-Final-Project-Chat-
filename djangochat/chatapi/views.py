@@ -24,6 +24,9 @@ class RoomViewSet(viewsets.ModelViewSet):
     serializer_class = RoomSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def perform_create(self, serializer):
+        serializer.save(host=self.request.user)
+
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """

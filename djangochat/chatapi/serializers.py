@@ -69,3 +69,4 @@ class RoomSerializer(serializers.ModelSerializer):
     
     def get_messages(self):
         return self.data["messages"]
+    
