@@ -3,11 +3,14 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from autoslug import AutoSlugField
+import uuid
 
 # Create your models here.
 
 class Room(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False, unique=True)
+    slug = AutoSlugField(populate_from='name', unique=True)
     host = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rooms")
     current_users = models.ManyToManyField(User, related_name="current_rooms", blank=True)
 

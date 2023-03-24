@@ -79,8 +79,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         return messages
     
     @database_sync_to_async
-    def get_room_model(self, name):
-        return get_object_or_404(Room, name=name)
+    def get_room_model(self, slug):
+        return get_object_or_404(Room, slug=slug)
 
         
 

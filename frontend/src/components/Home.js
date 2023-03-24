@@ -9,7 +9,7 @@ export default function Home() {
 
     useEffect(() => {
         async function fetchRooms() {
-            const url = 'http://localhost:8000/rooms';
+            const url = 'http://localhost:8000/rooms/';
             const csrftoken = getCookie('csrftoken');
             const request = await fetch(url, {
                 headers: {
@@ -32,7 +32,7 @@ export default function Home() {
         <li 
         key={room.id}
         >
-            <a href={'/room/' + room.name}>{room.name}</a>
+            <a href={'/room/' + room.slug}>{room.name}</a>
         </li>
     );
 

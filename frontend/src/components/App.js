@@ -5,6 +5,7 @@ import Layout from './Layout';
 import LoginForm from './LoginForm';
 import Home from './Home';
 import Room from './Room';
+import CreateRoom from './CreateRoom';
 import React from 'react';
 import {
   Browser,
@@ -45,6 +46,7 @@ function App() {
         <Route path="/" element={<Layout /> }/>
           <Route index element={isLoggedIn ? <Home /> : <Navigate to='login' />} />
           <Route path="room/:roomName" element={isLoggedIn ? <Room /> : <Navigate to='login' />}/>
+          <Route path="room/create" element={isLoggedIn ? <CreateRoom /> : <Navigate to='login' />}/>
           <Route path='login' element={<LoginForm />} />
       </Routes>
     </BrowserRouter>
