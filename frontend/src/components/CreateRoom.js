@@ -23,7 +23,7 @@ export default function CreateRoom() {
         if (response.status === 201) {
             console.log('created, todo redirect(?)')
         }
-        
+        setRoomName('')
     } 
 
     return (

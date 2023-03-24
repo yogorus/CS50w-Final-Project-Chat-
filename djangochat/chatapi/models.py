@@ -35,3 +35,12 @@ class Message(models.Model):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+@receiver(post_save, sender=Room)
+def set_first_current_user(**kwargs):
+    room = kwargs['instance']
+
+    if not room.current_users.all():
+        host = room.host
+        room.current_users.add(host)
+        room.save()

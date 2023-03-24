@@ -24,6 +24,11 @@ class RoomViewSet(viewsets.ModelViewSet):
     serializer_class = RoomSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def list(self, request):
+        queryset = request.user.current_rooms
+        serializer = RoomSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     def perform_create(self, serializer):
         serializer.save(host=self.request.user)
 
