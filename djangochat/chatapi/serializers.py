@@ -61,7 +61,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class RoomSerializer(serializers.ModelSerializer):
     messages = MessageSerializer(many=True, read_only=True)
-    host = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    host = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Room

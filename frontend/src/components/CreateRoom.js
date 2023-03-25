@@ -1,5 +1,8 @@
 import { useState } from "react";
 import getCookie from "../utils/getCookie";
+import Layout from "./Layout";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 export default function CreateRoom() {
     const [roomName, setRoomName] = useState('');
@@ -27,16 +30,24 @@ export default function CreateRoom() {
     } 
 
     return (
-        <form onSubmit={createRoomRequest}>
-            <input 
-            type="text" 
-            name="room-name" 
-            id="room-name"
-            placeholder="Set Room Name"
-            value={roomName}
-            autoFocus={true}
-            onChange={(e) => setRoomName(e.target.value)} />
-            <button type="submit">Create Room</button>
-        </form>
+        <Layout>
+            <Form className="mx-auto w-75" onSubmit={createRoomRequest}>
+                <Form.Group className="mb-3">
+                    <Form.Label><h5>Room name</h5></Form.Label>
+                    <Form.Control 
+                    type="text"
+                    name="room-name" 
+                    placeholder="Type in room name"
+                    value={roomName}
+                    autoFocus={true}
+                    onChange={(e) => setRoomName(e.target.value)}
+                     />
+                    <Form.Text className="text-muted">
+                        Create Chat Room if that name is not taken
+                    </Form.Text>
+                </Form.Group>
+                <Button variant="primary" type="submit">Submit</Button>
+            </Form>
+        </Layout>
     )
 }
