@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import getCookie from '../utils/getCookie';
 import Layout from './Layout';
-import { Button, Card, CardGroup } from 'react-bootstrap';
+import { Button, Card, CardGroup, Container, Row, Col } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
+    let navigate = useNavigate();
     const [state, setState] = useState({
         'rooms': []
     })
@@ -29,41 +31,45 @@ export default function Home() {
         fetchRooms()
     }, [])
 
-    const rooms = state.rooms.map(room =>
-        // <div key={room.id} className="col">
-            <Card key={room.id} className="m-2">
+    const rooms = state.rooms.map(room => 
+        <Col xs={6} md={4} lg={3} key={room.id}>
+            <Card className='m-2'>
                 <Card.Header>
                     <Card.Title>
-                        {/* <a href={'room/' + room.slug + '/'}>{room.name}</a> */}
-                        {room.name}
+                        <h4>{room.name}</h4>
                     </Card.Title>
-                </Card.Header>
-                <Card.Body>
                     <Card.Subtitle>
-                        Host: <b>{room.host.username}</b>
+                        <span className='text-muted'>Host: </span>
+                        {room.host.username}
                     </Card.Subtitle>
-                    <Card.Text>
-                        lorem ipsum and all that
-                    </Card.Text>
+                </Card.Header>
+                <Card.Body className='p-2'>
+                    {room.messages.length > 0 ?
+                        <>
+                            <Card.Subtitle>Last Message:</Card.Subtitle>
+                            <Card.Text>
+                                {/* the ? sign is called chaining */}
+                                <b>{room.messages.slice(-1)[0]?.user.username}</b>: {room?.messages[0]?.text}
+                            </Card.Text>   
+                        </>
+                        :
+                        <Card.Text>No messages yet...</Card.Text>
+                    }
                 </Card.Body>
-                <a href={'room/' + room.slug + '/'} className='mx-auto mb-1'>
-                    <Button variant='primary'>Enter</Button>
-                </a>
-                {/* <Button variant='primary'></Button> */}
+                <Button variant='outline-primary' onClick={() => navigate(`room/${room.slug}/`)}>Enter</Button>
             </Card>
-        // {/* </div> */}
-    );
+        </Col>    
+    )
 
     return(
         <Layout>
             <h1>My rooms</h1>
-            <div className="row">
-                <div className="col-12">
-                    <CardGroup>
-                        {rooms}
-                    </CardGroup>
-                </div>
-            </div>
+            <Container fluid>
+                <Row className='align-items-center'>
+                    {rooms}
+                </Row>
+            </Container>
         </Layout>
     )
 }
+
