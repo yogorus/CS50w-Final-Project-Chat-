@@ -12,9 +12,12 @@ code {
     monospace;
 }
 
-
-
 main {
   flex: 1;
   margin-bottom: 100px;
+}
+
+.chatbox {
+  height: 60vh;
+  overflow: auto;
 }

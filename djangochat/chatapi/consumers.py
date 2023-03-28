@@ -20,9 +20,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.accept()
             
             # Send chat history
-            room = await self.get_room_model(self.room_name)
-            messages = await self.get_room_messages(room)
-            await self.send(json.dumps({'type': 'load_messages', 'messages': messages}))
+            # room = await self.get_room_model(self.room_name)
+            # messages = await self.get_room_messages(room)
+            # await self.send(json.dumps({'type': 'load_messages', 'messages': messages}))
 
     async def disconnect(self, close_code):
         # Leave room group

@@ -53,6 +53,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class MessageSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+    created_at = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S")
     
     class Meta:
         model = Message

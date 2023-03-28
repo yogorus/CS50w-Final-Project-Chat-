@@ -56,7 +56,7 @@ export default function Home() {
                         <Card.Text>No messages yet...</Card.Text>
                     }
                 </Card.Body>
-                <Button variant='outline-primary' onClick={() => navigate(`room/${room.slug}/`)}>Enter</Button>
+                <Button variant='outline-primary' onClick={() => navigate(`room/${room.slug}/`, { state: {room: room} })}>Enter</Button>
             </Card>
         </Col>    
     )

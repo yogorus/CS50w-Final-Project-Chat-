@@ -45,7 +45,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout /> }/>
           <Route index element={isLoggedIn ? <Home /> : <Navigate to='login' />} />
-          <Route path="room/:roomName" element={isLoggedIn ? <Room /> : <Navigate to='login' />}/>
+          <Route path="room/:roomSlug" element={isLoggedIn ? <Room /> : <Navigate to='login' />}/>
           <Route path="room/create" element={isLoggedIn ? <CreateRoom /> : <Navigate to='login' />}/>
           <Route path='login' element={<LoginForm />} />
       </Routes>
