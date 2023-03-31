@@ -52,12 +52,40 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    created_at = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S")
+    username = serializers.CharField(source='user.username', read_only=True)
+    created_at = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S", required=False)
     
     class Meta:
         model = Message
-        fields = '__all__'
+        fields = ('__all__')
+        # exclude = ['user']
+
+    # def validate_user(self, user):
+    #     try:
+    #        user = User.objects.get(pk=user.id)
+        
+    #     except User.DoesNotExist:
+    #         raise serializers.ValidationError('user does not exists')
+        
+    #     return user
+    # def validate(self, attrs):
+    #     try:
+    #         user = User.objects.get(pk=attrs["user"].id)
+        
+    #     except User.DoesNotExist:
+    #         raise serializers.ValidationError({'error': 'user does not exists'})
+        
+    #     if not attrs['text']:
+    #         raise serializers.ValidationError({"error": "no text"})
+        
+    #     if not attrs['room']:
+    #         raise serializers.ValidationError({"error": "room id is not provided"})
+
+    #     return attrs
+
+    # def create(self, **validated_data):
+    #     user = User.objects.get(pk=validated_data['user'].id)
+    #     message = Message.objects.create(**validated_data, user=user)
 
 
 class RoomSerializer(serializers.ModelSerializer):

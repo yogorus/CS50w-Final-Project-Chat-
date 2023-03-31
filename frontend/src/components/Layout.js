@@ -22,7 +22,7 @@ const Layout = ({children}) => {
 function NavigationBar() {
     return (
             <Navbar collapseOnSelect expand="sm" bg='dark' variant='dark' className='p-2'>
-                <Navbar.Brand href="#home">JustChat</Navbar.Brand>
+                <Navbar.Brand>JustChat</Navbar.Brand>
                 <Navbar.Toggle aria-controls='navbarScroll' data-bs-target='#navbarScroll'/>
                 <Navbar.Collapse id='navbarScroll'>
                     <Nav>

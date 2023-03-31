@@ -29,6 +29,10 @@ export default function Home() {
             console.log(response)
         }
         fetchRooms()
+
+        return () => {
+            setState({...state, rooms: []})
+        }
     }, [])
 
     const rooms = state.rooms.map(room => 
@@ -49,7 +53,7 @@ export default function Home() {
                             <Card.Subtitle>Last Message:</Card.Subtitle>
                             <Card.Text>
                                 {/* the ? sign is called chaining */}
-                                <b>{room.messages.slice(-1)[0]?.user.username}</b>: {room?.messages[0]?.text}
+                                <b>{room.messages.slice(-1)[0]?.username}</b>: {room?.messages.slice(-1)[0]?.text}
                             </Card.Text>   
                         </>
                         :

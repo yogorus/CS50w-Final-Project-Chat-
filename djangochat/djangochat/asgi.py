@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/4.1/howto/deployment/asgi/
 import os
 
 import chatapi.routing
+from chatapi.middleware import TokenAuthMiddleware
 
 from channels.auth import AuthMiddlewareStack
 from channels.security.websocket import AllowedHostsOriginValidator
@@ -24,6 +25,6 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangochat.settings')
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AllowedHostsOriginValidator(
-        AuthMiddlewareStack(URLRouter(chatapi.routing.websocket_urlpatterns))
+        TokenAuthMiddleware(URLRouter(chatapi.routing.websocket_urlpatterns))
     ),
 })
