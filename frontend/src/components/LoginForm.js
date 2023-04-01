@@ -4,17 +4,18 @@ import getCookie from '../utils/getCookie';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card  from 'react-bootstrap/Card';
+import Alert from 'react-bootstrap/Alert';
 
 export default function LoginForm() {
     let navigate = useNavigate();
     const [state, setState] = useState({
         'username': '',
-        'password': ''
+        'password': '',
+        "usernameValidation": '',
+        "passwordValidation": '',
+        "nonFieldErrs": ''
     })
-    // useEffect(() => {
-    //     console.log(state)
-    // })
-
+    
     function updateForm(e) {
         setState({
             ...state,
@@ -43,15 +44,37 @@ export default function LoginForm() {
         if ('token' in response)
         {
             window.localStorage.setItem("token", JSON.stringify(response.token));
-            navigate('/')
+            navigate('../')
+        } else {
+            // if unable to log in, activate alerts
+            setState({
+                ...state,
+                usernameValidation: response.hasOwnProperty('username') ? response.username[0] : '',
+                passwordValidation: response.hasOwnProperty('password') ? response.password[0] : '',
+                nonFieldErrs: response.hasOwnProperty('non_field_errors') ? response.non_field_errors[0] : '',
+            })
         }
-    }
+    };
 
-    return(
-        <Card>
+   return(
+        <Card className='w-50 mx-auto m-1'>
+            <Card.Header>
+                <Card.Title>
+                    Sign In
+                </Card.Title>
+            </Card.Header>
+            <Card.Body>
             <Form className="mx-auto w-75" onSubmit={logUserIn}>
                 <Form.Group className="mb-3">
+                    <ValidationAlert 
+                    status={!!state.nonFieldErrs}
+                    response={state.nonFieldErrs}
+                    />
                     <Form.Label><h5>Username</h5></Form.Label>
+                    <ValidationAlert 
+                    status={!!state.usernameValidation}
+                    response={state.usernameValidation}
+                    />
                     <Form.Control 
                     type="text"
                     name="username" 
@@ -63,44 +86,31 @@ export default function LoginForm() {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label><h5>Password</h5></Form.Label>
+                    <ValidationAlert 
+                    status={!!state.passwordValidation}
+                    response={state.passwordValidation}
+                    />
                     <Form.Control 
                     type="password"
                     name="password" 
                     placeholder="Password"
                     value={state.password}
-                    autoFocus={true}
                     onChange={updateForm}
                     />
                 </Form.Group>
                 <Button variant="primary" type="submit">Sign In</Button>
             </Form>
+            </Card.Body>
+            {/* <button onClick={() => console.log(state)}>Click to check state</button> */}
         </Card>
-        // <div>
-        //     <h1>Log in</h1>
-        //     <form onSubmit={logUserIn}>
-        //         <label htmlFor="">
-        //             <p>Username</p>
-        //             <input
-        //             name='username' 
-        //             type="text"
-        //             value={state.username} 
-        //             onChange={updateForm}
-        //             autoFocus={true}
-        //             />
-        //         </label>
-        //         <label htmlFor="">
-        //             <p>Password</p>
-        //             <input
-        //             name='password' 
-        //             type="password" 
-        //             value={state.password} 
-        //             onChange={updateForm}
-        //             />
-        //         </label>
-        //         <div className="">
-        //             <button type="submit">Log in</button>
-        //         </div>
-        //     </form>
-        // </div>
+    )
+}
+
+function ValidationAlert(props) {
+    
+    return(
+        <Alert show={props.status} variant='danger'>
+            {props.response}
+        </Alert>
     )
 }

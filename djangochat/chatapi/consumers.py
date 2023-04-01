@@ -62,7 +62,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from room group
     async def chat_message(self, event):
         
-        # Get message dict
+        # Get serialized message
         message = event["message"]
         
         # Send message to WebSocket
@@ -90,7 +90,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     
     @database_sync_to_async
     def get_room_messages(self, room):
-        # room = get_object_or_404(Room, pk=pk)
         messages = RoomSerializer(room).get_messages()
         return messages
     
