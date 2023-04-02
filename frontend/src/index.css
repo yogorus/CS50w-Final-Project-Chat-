@@ -21,3 +21,8 @@ main {
   height: 60vh;
   overflow: auto;
 }
+
+.last-message {
+  height: 3em;
+  overflow: hidden;
+}

@@ -1,5 +1,5 @@
 import {React, useState, useEffect }from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import getCookie from '../utils/getCookie';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -15,7 +15,13 @@ export default function LoginForm() {
         "passwordValidation": '',
         "nonFieldErrs": ''
     })
-    
+    // const [isLoggedIn, setIsLoggedIn] = useState(
+    //     () => localStorage.getItem('token') !== null
+    //   );
+    // const [token, setToken] = useState(null)
+    // const [authenticated, setAuthenticated] = useState(false)
+    // const token = JSON.parse(window.localStorage.getItem('token'));
+
     function updateForm(e) {
         setState({
             ...state,
@@ -39,12 +45,15 @@ export default function LoginForm() {
             body: JSON.stringify(data)
         })
         response = await response.json()
+        // checkLogin();
         console.log(response)
         // If response returned auth token, we're safe to redirect the user
         if ('token' in response)
-        {
-            window.localStorage.setItem("token", JSON.stringify(response.token));
+        {   
+            await window.localStorage.setItem("token", JSON.stringify(response.token));
+            // asyncLocalStorage.setItem("token", JSON.stringify(response.token))
             navigate('../')
+            // setAuthenticated(true)
         } else {
             // if unable to log in, activate alerts
             setState({
@@ -101,7 +110,7 @@ export default function LoginForm() {
                 <Button variant="primary" type="submit">Sign In</Button>
             </Form>
             </Card.Body>
-            {/* <button onClick={() => console.log(state)}>Click to check state</button> */}
+            {/* <button onClick={() => console.log(isLoggedIn)}>Click to check state</button> */}
         </Card>
     )
 }

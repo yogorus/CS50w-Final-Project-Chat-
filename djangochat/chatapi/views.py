@@ -6,9 +6,11 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics, viewsets, permissions, status
+from rest_framework import generics, viewsets, permissions, filters
 from .serializers import UserSerializer, GroupSerializer, RegisterSerializer, LoginSerializer, RoomSerializer
 from .models import Room
+
+import json
 
 # Create your views here.
 def index(request):
@@ -20,14 +22,28 @@ def room(request, room_name):
 
 
 class RoomViewSet(viewsets.ModelViewSet):
-    queryset = Room.objects.all()
+    # queryset = Room.objects.all()
     serializer_class = RoomSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
 
-    def list(self, request):
-        queryset = request.user.current_rooms
-        serializer = RoomSerializer(queryset, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        my_rooms = json.loads(self.request.query_params.get('my_rooms', 'false'))
+
+        if my_rooms:
+            queryset = self.request.user.current_rooms
+        
+        else:
+            queryset = Room.objects.all()
+            
+        return queryset
+    
+
+    # def list(self, request):
+    #     queryset = request.user.current_rooms
+    #     serializer = RoomSerializer(queryset, many=True)
+    #     return Response(serializer.data)
 
     def perform_create(self, serializer):
         serializer.save(host=self.request.user)

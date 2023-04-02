@@ -20,11 +20,11 @@ export default function Room() {
 
     useEffect(() => {
         
-        const initChat = async () => {
-            await setChatSocket(new WebSocket(
+        const initChat = () => {
+            setChatSocket(new WebSocket(
                 `ws://${window.location.hostname}:8000/ws/chat/${room.slug}/?token=${token}`
             )); // ?token=${token}
-            await setChatSocketReady(true);
+            setChatSocketReady(true);
         };
         initChat();
         
@@ -84,11 +84,16 @@ export default function Room() {
         
     }, [chatSocket])
     
+    function pressEnter(e) {
+        if (e.key == 'Enter') {
+            sendMessage(e);
+        }
+    }
 
     async function sendMessage(e) {
         e.preventDefault();
         await chatSocket.send(JSON.stringify({
-            message: state.textToSend
+            message: state.textToSend.trim()
         }))
         setState({...state, textToSend: ''})
         console.log("send")
@@ -131,6 +136,7 @@ export default function Room() {
                             as={'textarea'} 
                             className="mb-1" 
                             onChange={(e) => setState({...state, textToSend: e.target.value})}
+                            onKeyDown={pressEnter}
                             value={state.textToSend}
                             />
                             <Button type='submit'>Send</Button>
