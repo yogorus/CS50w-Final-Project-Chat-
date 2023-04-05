@@ -89,7 +89,9 @@ export default function Home() {
             {/* <h1>My rooms</h1> */}
             <Container fluid>
                 <Row className='align-items-center'>
-                    {rooms}
+                    {
+                    rooms.length > 0 ? rooms : <h1>Not found...</h1>
+                    }
                 </Row>
             </Container>
         </Layout>
