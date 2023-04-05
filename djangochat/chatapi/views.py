@@ -5,8 +5,9 @@ from django.contrib.auth.models import User, Group
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import generics, viewsets, permissions, filters
+from rest_framework import generics, viewsets, permissions, filters, status
 from .serializers import UserSerializer, GroupSerializer, RegisterSerializer, LoginSerializer, RoomSerializer
 from .models import Room
 
@@ -22,9 +23,7 @@ def room(request, room_name):
 
 
 class RoomViewSet(viewsets.ModelViewSet):
-    # queryset = Room.objects.all()
     serializer_class = RoomSerializer
-    # permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
 
@@ -39,11 +38,28 @@ class RoomViewSet(viewsets.ModelViewSet):
             
         return queryset
     
+    @action(methods=['delete'], detail=True)
+    def leave_room(self, request, *args, **kwargs):
+        room = self.get_object()
+        
+        if request.user in room.current_users.all():
+            room.current_users.remove(request.user)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+            
 
-    # def list(self, request):
-    #     queryset = request.user.current_rooms
-    #     serializer = RoomSerializer(queryset, many=True)
-    #     return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        room = self.get_object()
+
+        if request.user == room.host:
+            self.perform_destroy(room)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+    
+
 
     def perform_create(self, serializer):
         serializer.save(host=self.request.user)
