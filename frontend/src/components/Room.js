@@ -1,14 +1,19 @@
 import { useEffect, useState, useRef} from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { Card, Button, Form } from 'react-bootstrap';
+import { Card, Button, Form, DropdownButton } from 'react-bootstrap';
+import Dropdown from 'react-bootstrap/Dropdown';
 import Layout from './Layout';
+import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
 
 export default function Room() {
     const location = useLocation();
     let room = location.state.room;
-
+    
     const token = JSON.parse(window.localStorage.getItem('token'));
+    const userId = JSON.parse(window.localStorage.getItem('user_id'));
+    const username = JSON.parse(window.localStorage.getItem('username'));
 
+    
     const [chatSocketReady, setChatSocketReady] = useState(false);
     const [chatSocket, setChatSocket] = useState(null);
 
@@ -23,7 +28,7 @@ export default function Room() {
         const initChat = () => {
             setChatSocket(new WebSocket(
                 `ws://${window.location.hostname}:8000/ws/chat/${room.slug}/?token=${token}`
-            )); // ?token=${token}
+            ));
             setChatSocketReady(true);
         };
         initChat();
@@ -121,7 +126,19 @@ export default function Room() {
             <Card className='w-75 mx-auto mt-2'>
                 <Card.Header>
                     <Card.Title>
-                        <h2>{room.name}</h2>
+                        <h2 className='d-flex justify-content-between align-items-center'>
+                            {room.name}
+                            <DropdownButton variant='dark' title="Actions" menuVariant='dark'>
+                                {room.current_users.includes(userId)
+                                    ? <Dropdown.Item>Leave Room</Dropdown.Item>
+                                    : <></>
+                                }
+                                {room.host.username === username
+                                    ? <Dropdown.Item>Delete Room</Dropdown.Item>
+                                    : <></>
+                                }
+                            </DropdownButton>
+                        </h2>
                     </Card.Title>
                 </Card.Header>
                 <Card.Body>
@@ -138,6 +155,7 @@ export default function Room() {
                             onChange={(e) => setState({...state, textToSend: e.target.value})}
                             onKeyDown={pressEnter}
                             value={state.textToSend}
+                            autoFocus
                             />
                             <Button type='submit'>Send</Button>
                         </Form.Group>

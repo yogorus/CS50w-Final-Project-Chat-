@@ -11,6 +11,8 @@ export default function Home() {
     const [state, setState] = useState({
         rooms: [],
     })
+
+    const userId = JSON.parse(window.localStorage.getItem('user_id'));
     
     const [myRooms, setMyRooms] = useState(true)
     const [searchQuery, setSearchQuery] = useState("")
@@ -65,7 +67,11 @@ export default function Home() {
                         <Card.Text>No messages yet...</Card.Text>
                     }
                 </Card.Body>
-                <Button variant='outline-primary' onClick={() => navigate(`room/${room.slug}/`, { state: {room: room} })}>Enter</Button>
+                {room.current_users.includes(userId)
+                    ? <Button variant='outline-primary' onClick={() => navigate(`room/${room.slug}/`, { state: {room: room} })}>Enter</Button>
+                    : <Button variant='outline-success'>Join</Button> 
+                }
+                {/* <Button variant='outline-primary' onClick={() => navigate(`room/${room.slug}/`, { state: {room: room} })}>Enter</Button> */}
             </Card>
         </Col>    
     )
@@ -75,7 +81,7 @@ export default function Home() {
             <Button variant='outline-primary' size='lg' className='m-1' active={myRooms} onClick={() => setMyRooms(true)}>My Rooms</Button>
             <Button variant='outline-primary' size='lg' className='m-1' active={!myRooms} onClick={() => setMyRooms(false)}>All Rooms</Button>
             <InputGroup className="m-1">
-        <InputGroup.Text className='' id="inputGroup-sizing-default">
+        <InputGroup.Text id="inputGroup-sizing-default">
           Search
         </InputGroup.Text>
         <Form.Control
@@ -84,6 +90,7 @@ export default function Home() {
         aria-describedby="inputGroup-sizing-default"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
+        autoFocus
         />
       </InputGroup>            
             {/* <h1>My rooms</h1> */}

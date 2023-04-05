@@ -47,8 +47,16 @@ class RoomViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         
         return Response(status=status.HTTP_401_UNAUTHORIZED)
-            
+    
+    # Join Room       
+    def patch(self, request, *args, **kwargs):
+        room = self.get_object()
 
+        if request.user not in room.current_users.all():
+            room.current_users.add(request.user)
+            return Response(status=status.HTTP_200_OK)
+        
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
         room = self.get_object()

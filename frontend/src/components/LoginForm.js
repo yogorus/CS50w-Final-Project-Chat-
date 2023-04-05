@@ -44,6 +44,8 @@ export default function LoginForm() {
         if ('token' in response)
         {   
             window.localStorage.setItem("token", JSON.stringify(response.token));
+            window.localStorage.setItem("username", JSON.stringify(response.username));
+            window.localStorage.setItem('user_id', JSON.stringify(response.user_id));
             navigate('../')
         } else {
             // if unable to log in, activate alerts
