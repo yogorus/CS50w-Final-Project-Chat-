@@ -15,13 +15,7 @@ export default function LoginForm() {
         "passwordValidation": '',
         "nonFieldErrs": ''
     })
-    // const [isLoggedIn, setIsLoggedIn] = useState(
-    //     () => localStorage.getItem('token') !== null
-    //   );
-    // const [token, setToken] = useState(null)
-    // const [authenticated, setAuthenticated] = useState(false)
-    // const token = JSON.parse(window.localStorage.getItem('token'));
-
+    
     function updateForm(e) {
         setState({
             ...state,
@@ -45,15 +39,12 @@ export default function LoginForm() {
             body: JSON.stringify(data)
         })
         response = await response.json()
-        // checkLogin();
         console.log(response)
         // If response returned auth token, we're safe to redirect the user
         if ('token' in response)
         {   
-            await window.localStorage.setItem("token", JSON.stringify(response.token));
-            // asyncLocalStorage.setItem("token", JSON.stringify(response.token))
+            window.localStorage.setItem("token", JSON.stringify(response.token));
             navigate('../')
-            // setAuthenticated(true)
         } else {
             // if unable to log in, activate alerts
             setState({

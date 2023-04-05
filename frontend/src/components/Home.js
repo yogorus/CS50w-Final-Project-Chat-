@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import getCookie from '../utils/getCookie';
 import Layout from './Layout';
 import { Button, Card, CardGroup, Container, Row, Col } from 'react-bootstrap';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
@@ -70,8 +72,21 @@ export default function Home() {
 
     return(
         <Layout>
-            <Button></Button>
-            <h1>My rooms</h1>
+            <Button variant='outline-primary' size='lg' className='m-1' active={myRooms} onClick={() => setMyRooms(true)}>My Rooms</Button>
+            <Button variant='outline-primary' size='lg' className='m-1' active={!myRooms} onClick={() => setMyRooms(false)}>All Rooms</Button>
+            <InputGroup className="m-1">
+        <InputGroup.Text className='' id="inputGroup-sizing-default">
+          Search
+        </InputGroup.Text>
+        <Form.Control
+        className=''
+        aria-label="Default"
+        aria-describedby="inputGroup-sizing-default"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </InputGroup>            
+            {/* <h1>My rooms</h1> */}
             <Container fluid>
                 <Row className='align-items-center'>
                     {rooms}
