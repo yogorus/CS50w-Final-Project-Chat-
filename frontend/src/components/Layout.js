@@ -1,4 +1,5 @@
-import { Nav, Navbar, NavDropdown, NavLink} from 'react-bootstrap';
+import { Nav, Navbar, NavDropdown, NavLink } from 'react-bootstrap';
+import { useState } from 'react';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,7 +10,7 @@ const Layout = ({children}) => {
         <>
             <NavigationBar />
             <main>
-                <Container fluid>
+                <Container fluid className='h-100'>
                     {children}
                 </Container>
             </main>
@@ -19,21 +20,28 @@ const Layout = ({children}) => {
 }
 
 function NavigationBar() {
-    const username = JSON.parse(window.localStorage.getItem('username'));
+    const [isLoggedIn, setIsLoggedIn] = useState(
+        () => localStorage.getItem('token') !== null
+      );
+    const username = (isLoggedIn) ? JSON.parse(window.localStorage.getItem('username')) : '';
     const navigate = useNavigate();
 
     function logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('username');
         localStorage.removeItem('user_id');
+        setIsLoggedIn(false)
         navigate('../login')
     }
 
     return (
             <Navbar collapseOnSelect expand="sm" bg='dark' variant='dark' className='p-2'>
-                <Navbar.Brand>ChatIT</Navbar.Brand>
-                <Navbar.Toggle aria-controls='navbarScroll' data-bs-target='#navbarScroll'/>
-                <Navbar.Collapse id='navbarScroll'>
+                <Navbar.Brand href='#'>ChatIT</Navbar.Brand>
+                {!!isLoggedIn
+                ?
+                <>
+                    <Navbar.Toggle aria-controls='navbarScroll' data-bs-target='#navbarScroll'/>
+                    <Navbar.Collapse id='navbarScroll'>
                     <Nav className='me-auto'>
                         <NavLink as={Link} to="/">Home</NavLink>
                         <NavLink as={Link} to="/room/create">Create Room</NavLink>
@@ -41,7 +49,10 @@ function NavigationBar() {
                             <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
-                </Navbar.Collapse>
+                    </Navbar.Collapse>
+                </>
+                : <></>
+                }
             </Navbar>
     )
 }

@@ -5,7 +5,7 @@ import Card  from 'react-bootstrap/Card';
 import Alert from 'react-bootstrap/Alert';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import CardHeader from 'react-bootstrap/esm/CardHeader';
+import Layout from './Layout';
 
 export default function SignUpForm() {
     let navigate = useNavigate();
@@ -81,66 +81,68 @@ export default function SignUpForm() {
     }
 
     return(
-        <Card className='w-50 mx-auto m-1 auth-form'>
-            <CardHeader>
-                <Card.Title>
-                    Sign Up
-                </Card.Title>
-            </CardHeader>
-            <Card.Body>
-                <Form className="mx-auto w-75" onSubmit={register}>
-                    <Form.Group className="mb-3">
-                        <ValidationAlert 
-                        status={!!state.nonFieldErrs}
-                        response={state.nonFieldErrs}
-                        />
-                        <Form.Label><h5>Username</h5></Form.Label>
-                        <ValidationAlert 
-                        status={!!state.usernameValidation}
-                        response={state.usernameValidation}
-                        />
-                        <Form.Control 
-                        type="text"
-                        name="username" 
-                        placeholder="Username"
-                        value={state.username}
-                        autoFocus={true}
-                        onChange={updateForm}
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label><h5>Password</h5></Form.Label>
-                        <ValidationAlert 
-                        status={!!state.passwordValidation}
-                        response={state.passwordValidation}
-                        />
-                        <Form.Control 
-                        type="password"
-                        name="password" 
-                        placeholder="Password"
-                        value={state.password}
-                        onChange={updateForm}
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label><h5>Confirm Password</h5></Form.Label>
-                        <ValidationAlert 
-                        status={!!state.password2Validation}
-                        response={state.password2Validation}
-                        />
-                        <Form.Control 
-                        type="password"
-                        name="password2" 
-                        placeholder="Confirm Password"
-                        value={state.password2}
-                        onChange={updateForm}
-                        />
-                    </Form.Group>
-                    <Button variant="primary" type="submit">Sign Up</Button>
-                </Form>
-                <button onClick={() => console.log(state)}>Click to check state</button>
-            </Card.Body>
-        </Card>
+        <Layout>
+            <Card className='w-50 mx-auto mt-5 m-1 auth-form'>
+                <Card.Header>
+                    <Card.Title>
+                        Sign Up
+                    </Card.Title>
+                </Card.Header>
+                <Card.Body>
+                    <Form className="mx-auto w-75" onSubmit={register}>
+                        <Form.Group className="mb-3">
+                            <ValidationAlert 
+                            status={!!state.nonFieldErrs}
+                            response={state.nonFieldErrs}
+                            />
+                            <Form.Label><h5>Username</h5></Form.Label>
+                            <ValidationAlert 
+                            status={!!state.usernameValidation}
+                            response={state.usernameValidation}
+                            />
+                            <Form.Control 
+                            type="text"
+                            name="username" 
+                            placeholder="Username"
+                            value={state.username}
+                            autoFocus={true}
+                            onChange={updateForm}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label><h5>Password</h5></Form.Label>
+                            <ValidationAlert 
+                            status={!!state.passwordValidation}
+                            response={state.passwordValidation}
+                            />
+                            <Form.Control 
+                            type="password"
+                            name="password" 
+                            placeholder="Password"
+                            value={state.password}
+                            onChange={updateForm}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label><h5>Confirm Password</h5></Form.Label>
+                            <ValidationAlert 
+                            status={!!state.password2Validation}
+                            response={state.password2Validation}
+                            />
+                            <Form.Control 
+                            type="password"
+                            name="password2" 
+                            placeholder="Confirm Password"
+                            value={state.password2}
+                            onChange={updateForm}
+                            />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">Sign Up</Button>
+                    </Form>
+                    {/* <button onClick={() => console.log(state)}>Click to check state</button> */}
+                </Card.Body>
+            </Card>
+        </Layout>
     )
 }
 

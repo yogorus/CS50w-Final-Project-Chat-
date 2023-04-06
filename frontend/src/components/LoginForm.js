@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Card  from 'react-bootstrap/Card';
 import Alert from 'react-bootstrap/Alert';
 import Container from 'react-bootstrap/Container'
+import Layout from './Layout';
 
 export default function LoginForm() {
     let navigate = useNavigate();
@@ -60,57 +61,58 @@ export default function LoginForm() {
     };
 
    return(
-        <Card className='w-50 mx-auto m-1 auth-form'>
-            <Card.Header>
-                <Card.Title>
-                    Sign In
-                </Card.Title>
-            </Card.Header>
-            <Card.Body>
-            <Form className="mx-auto w-75" onSubmit={logUserIn}>
-                <Form.Group className="mb-3">
-                    <ValidationAlert 
-                    status={!!state.nonFieldErrs}
-                    response={state.nonFieldErrs}
-                    />
-                    <Form.Label><h5>Username</h5></Form.Label>
-                    <ValidationAlert 
-                    status={!!state.usernameValidation}
-                    response={state.usernameValidation}
-                    />
-                    <Form.Control 
-                    type="text"
-                    name="username" 
-                    placeholder="Username"
-                    value={state.username}
-                    autoFocus={true}
-                    onChange={updateForm}
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label><h5>Password</h5></Form.Label>
-                    <ValidationAlert 
-                    status={!!state.passwordValidation}
-                    response={state.passwordValidation}
-                    />
-                    <Form.Control 
-                    type="password"
-                    name="password" 
-                    placeholder="Password"
-                    value={state.password}
-                    onChange={updateForm}
-                    />
-                </Form.Group>
-                <Button variant="primary" type="submit">Sign In</Button>
-            </Form>
-            <div className="text-center">Don't have an account?</div>
-            <div className="text-center">
-                <a href="/register">Sign up</a>
-            </div>
-
-            </Card.Body>
-            {/* <button onClick={() => console.log(isLoggedIn)}>Click to check state</button> */}
-        </Card>
+        <Layout>
+            <Card className='w-50 mx-auto mt-5 m-1 auth-form'>
+                <Card.Header>
+                    <Card.Title>
+                        Sign In
+                    </Card.Title>
+                </Card.Header>
+                <Card.Body>
+                    <Form className="mx-auto w-75" onSubmit={logUserIn}>
+                        <Form.Group className="mb-3">
+                            <ValidationAlert 
+                            status={!!state.nonFieldErrs}
+                            response={state.nonFieldErrs}
+                            />
+                            <Form.Label><h5>Username</h5></Form.Label>
+                            <ValidationAlert 
+                            status={!!state.usernameValidation}
+                            response={state.usernameValidation}
+                            />
+                            <Form.Control 
+                            type="text"
+                            name="username" 
+                            placeholder="Username"
+                            value={state.username}
+                            autoFocus={true}
+                            onChange={updateForm}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label><h5>Password</h5></Form.Label>
+                            <ValidationAlert 
+                            status={!!state.passwordValidation}
+                            response={state.passwordValidation}
+                            />
+                            <Form.Control 
+                            type="password"
+                            name="password" 
+                            placeholder="Password"
+                            value={state.password}
+                            onChange={updateForm}
+                            />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">Sign In</Button>
+                    </Form>
+                    <div className="text-center">Don't have an account?</div>
+                    <div className="text-center">
+                        <a href="/register">Sign up</a>
+                    </div>
+                </Card.Body>
+                {/* <button onClick={() => console.log(isLoggedIn)}>Click to check state</button> */}
+            </Card>
+        </Layout>
     )
 }
 

@@ -28,7 +28,7 @@ main {
 }
 
 .auth-form {
-  top: 40%;
+  margin-top: 40% !important;
 }
 
 @media screen and (max-width: 490px) {
