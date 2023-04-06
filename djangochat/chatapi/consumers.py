@@ -19,7 +19,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = "chat_%s" % self.room_name
         self.room = await self.get_room_model(self.room_name)
         
-        if self.scope["user"].is_authenticated:
+        if self.scope["user"].is_authenticated and await self.user_in_room():
             # Join room group
             await self.channel_layer.group_add(self.room_group_name, self.channel_name)
             user = await self.get_user(self.scope['user'])
@@ -102,6 +102,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def serialize_room(self, model):
         return RoomSerializer(instance=model).data
-
-        
-
+    
+    @database_sync_to_async
+    def user_in_room(self):
+        return self.scope["user"] in self.room.current_users.all() 

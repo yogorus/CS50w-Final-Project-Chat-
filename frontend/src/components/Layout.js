@@ -54,7 +54,7 @@ function Footer() {
                     <Col>
                         <h3>Contacts</h3>
                         <ul className='list-unstyled text-small'>
-                            <li><a href="" className='text-secondary'>Github</a></li>
+                            <li><a href="https://github.com/yogorus" className='text-secondary'>Github</a></li>
                         </ul>
                     </Col>
                 </Row>
