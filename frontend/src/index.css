@@ -26,3 +26,25 @@ main {
   height: 3em;
   overflow: hidden;
 }
+
+.auth-form {
+  top: 40%;
+}
+
+@media screen and (max-width: 490px) {
+  .auth-form {
+    min-width: 95% !important;
+  }
+}
+
+@media screen and (max-width: 490px) {
+  .chat-card {
+    min-width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 490px) {
+  .create-card {
+    min-width: 100% !important;
+  }
+}

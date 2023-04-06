@@ -156,7 +156,7 @@ export default function Room() {
     // DOM render
     return (
         <Layout>
-            <Card className='w-75 mx-auto mt-2'>
+            <Card className='w-75 mx-auto mt-2 chat-card'>
                 <Card.Header>
                     <Card.Title>
                         <h2 className='d-flex justify-content-between align-items-center'>

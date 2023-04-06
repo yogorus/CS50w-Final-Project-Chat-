@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Alert from "react-bootstrap/Alert";
 import { useNavigate } from "react-router-dom";
+import { Card } from "react-bootstrap";
 
 export default function CreateRoom() {
     const [roomName, setRoomName] = useState('');
@@ -41,26 +42,33 @@ export default function CreateRoom() {
 
     return (
         <Layout>
-            <Form className="mx-auto w-75" onSubmit={createRoomRequest}>
-                <Form.Group className="mb-3">
-                    <Form.Label><h5>Room name</h5></Form.Label>
-                    <ValidationAlert 
-                    status={showAlert}
-                    />
-                    <Form.Control 
-                    type="text"
-                    name="room-name" 
-                    placeholder="Type in room name"
-                    value={roomName}
-                    autoFocus={true}
-                    onChange={(e) => setRoomName(e.target.value)}
-                     />
-                    <Form.Text className="text-muted">
-                        Create Chat Room if that name is not taken
-                    </Form.Text>
-                </Form.Group>
-                <Button variant="primary" type="submit">Create</Button>
-            </Form>
+            <Card className="w-50 mx-auto mt-5 create-card">
+                <Card.Header>
+                    <Card.Title>
+                        Create Room
+                    </Card.Title>
+                </Card.Header>
+                <Form className="mx-auto w-75 p-1" onSubmit={createRoomRequest}>
+                    <Form.Group className="mb-3">
+                        <Form.Label><h5>Room name</h5></Form.Label>
+                        <ValidationAlert 
+                        status={showAlert}
+                        />
+                        <Form.Control 
+                        type="text"
+                        name="room-name" 
+                        placeholder="Type in room name"
+                        value={roomName}
+                        autoFocus={true}
+                        onChange={(e) => setRoomName(e.target.value)}
+                        />
+                        <Form.Text className="text-muted">
+                            Create Chat Room if that name is not taken
+                        </Form.Text>
+                    </Form.Group>
+                    <Button variant="primary" type="submit">Create</Button>
+                </Form>
+            </Card>
         </Layout>
     )
 }

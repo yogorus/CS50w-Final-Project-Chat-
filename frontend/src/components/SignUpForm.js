@@ -81,7 +81,7 @@ export default function SignUpForm() {
     }
 
     return(
-        <Card className='w-50 mx-auto m-1'>
+        <Card className='w-50 mx-auto m-1 auth-form'>
             <CardHeader>
                 <Card.Title>
                     Sign Up

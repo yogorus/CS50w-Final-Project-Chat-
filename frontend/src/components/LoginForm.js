@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card  from 'react-bootstrap/Card';
 import Alert from 'react-bootstrap/Alert';
+import Container from 'react-bootstrap/Container'
 
 export default function LoginForm() {
     let navigate = useNavigate();
@@ -59,7 +60,7 @@ export default function LoginForm() {
     };
 
    return(
-        <Card className='w-50 mx-auto m-1'>
+        <Card className='w-50 mx-auto m-1 auth-form'>
             <Card.Header>
                 <Card.Title>
                     Sign In
