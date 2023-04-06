@@ -13,6 +13,8 @@ export default function Home() {
     })
 
     const userId = JSON.parse(window.localStorage.getItem('user_id'));
+    const token = JSON.parse(window.localStorage.getItem('token'));
+
     
     const [myRooms, setMyRooms] = useState(true)
     const [searchQuery, setSearchQuery] = useState("")
@@ -25,7 +27,7 @@ export default function Home() {
                 headers: {
                     'Content-type': 'application/json',
                     'X-CSRFToken': csrftoken,
-                    'Authorization': `Token ${JSON.parse(window.localStorage.getItem('token'))}`
+                    'Authorization': `Token ${token}`
                 },
             })
             console.log(request)
@@ -41,6 +43,22 @@ export default function Home() {
             setState({...state, rooms: []})
         }
     }, [myRooms, searchQuery])
+
+    async function joinRoom(room) {
+        const url = `http://localhost:8000/rooms/${room.id}/`
+        const csrftoken = getCookie('csrftoken');
+        const request = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-type': 'application/json',
+                'X-CSRFToken': csrftoken,
+                'Authorization': `Token ${token}`
+            },
+        })
+        if (request.status === 200) {
+            navigate(`room/${room.slug}/`, { state: {room: room} })
+        }
+    }
 
     const rooms = state.rooms.map(room => 
         <Col xs={6} md={4} lg={3} key={room.id}>
@@ -69,7 +87,7 @@ export default function Home() {
                 </Card.Body>
                 {room.current_users.includes(userId)
                     ? <Button variant='outline-primary' onClick={() => navigate(`room/${room.slug}/`, { state: {room: room} })}>Enter</Button>
-                    : <Button variant='outline-success'>Join</Button> 
+                    : <Button variant='outline-success' onClick={() => joinRoom(room)}>Join</Button> 
                 }
                 {/* <Button variant='outline-primary' onClick={() => navigate(`room/${room.slug}/`, { state: {room: room} })}>Enter</Button> */}
             </Card>

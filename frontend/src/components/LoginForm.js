@@ -102,6 +102,11 @@ export default function LoginForm() {
                 </Form.Group>
                 <Button variant="primary" type="submit">Sign In</Button>
             </Form>
+            <div className="text-center">Don't have an account?</div>
+            <div className="text-center">
+                <a href="/register">Sign up</a>
+            </div>
+
             </Card.Body>
             {/* <button onClick={() => console.log(isLoggedIn)}>Click to check state</button> */}
         </Card>

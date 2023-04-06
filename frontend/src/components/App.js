@@ -17,6 +17,7 @@ import {
   Switch
 } from "react-router-dom";
 import { useEffect, useState } from 'react';
+import SignUpForm from './SignUpForm';
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
           <Route path="room/create" element={<CreateRoom />}/>
         </Route>
           <Route path='login' element={<LoginForm />} />
+          <Route path='register' element={<SignUpForm />} />
       </Routes>
     </BrowserRouter>
   );

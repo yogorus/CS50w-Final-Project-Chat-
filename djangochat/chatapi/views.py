@@ -35,7 +35,8 @@ class RoomViewSet(viewsets.ModelViewSet):
         
         else:
             queryset = Room.objects.all()
-            
+
+        # in posgres we can do return queryset.order_by('messages').distinct()    
         return queryset
     
     @action(methods=['delete'], detail=True)
@@ -49,7 +50,7 @@ class RoomViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
     
     # Join Room       
-    def patch(self, request, *args, **kwargs):
+    def update(self, request, *args, **kwargs):
         room = self.get_object()
 
         if request.user not in room.current_users.all():
@@ -67,8 +68,6 @@ class RoomViewSet(viewsets.ModelViewSet):
         
         return Response(status=status.HTTP_401_UNAUTHORIZED)
     
-
-
     def perform_create(self, serializer):
         serializer.save(host=self.request.user)
 

@@ -1,9 +1,8 @@
-import { Nav, Navbar, NavLink} from 'react-bootstrap';
+import { Nav, Navbar, NavDropdown, NavLink} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
 
 const Layout = ({children}) => {
     return (
@@ -20,15 +19,27 @@ const Layout = ({children}) => {
 }
 
 function NavigationBar() {
+    const username = JSON.parse(window.localStorage.getItem('username'));
+    const navigate = useNavigate();
+
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        localStorage.removeItem('user_id');
+        navigate('../login')
+    }
+
     return (
             <Navbar collapseOnSelect expand="sm" bg='dark' variant='dark' className='p-2'>
                 <Navbar.Brand>ChatIT</Navbar.Brand>
                 <Navbar.Toggle aria-controls='navbarScroll' data-bs-target='#navbarScroll'/>
                 <Navbar.Collapse id='navbarScroll'>
-                    <Nav>
+                    <Nav className='me-auto'>
                         <NavLink as={Link} to="/">Home</NavLink>
                         <NavLink as={Link} to="/room/create">Create Room</NavLink>
-                        <NavLink as={Link} to="/login">Log In</NavLink>
+                        <NavDropdown title={username}>
+                            <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+                        </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

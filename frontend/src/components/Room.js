@@ -1,43 +1,44 @@
 import { useEffect, useState, useRef} from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Card, Button, Form, DropdownButton } from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Layout from './Layout';
-import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
+import getCookie from '../utils/getCookie';
 
 export default function Room() {
     const location = useLocation();
-    let room = location.state.room;
+    const navigate = useNavigate();
     
+    const { roomSlug } = useParams();
+    console.log(roomSlug)
+
     const token = JSON.parse(window.localStorage.getItem('token'));
     const userId = JSON.parse(window.localStorage.getItem('user_id'));
     const username = JSON.parse(window.localStorage.getItem('username'));
 
-    
+    const [room, setRoom] = useState((!!location.state) ? location.state.room : {})     // If state was passed(through enter button), set it as room, otherwise empty object
     const [chatSocketReady, setChatSocketReady] = useState(false);
     const [chatSocket, setChatSocket] = useState(null);
 
-        // `ws://${window.location.hostname}:8000/ws/chat/${room.slug}/?token=${token}`
     const [state, setState] = useState({
         textToSend: '',
-        messages: room.messages,
+        messages: (!!room.messages) ? room.messages : [],   // Get messages from passed location state, otherwise make it an empty list
     })
 
     useEffect(() => {
         
         const initChat = () => {
             setChatSocket(new WebSocket(
-                `ws://${window.location.hostname}:8000/ws/chat/${room.slug}/?token=${token}`
+                `ws://${window.location.hostname}:8000/ws/chat/${roomSlug}/?token=${token}`
             ));
             setChatSocketReady(true);
         };
         initChat();
         
+        // Cleanup function
         return () => {
             if (chatSocketReady) {
                 chatSocket.close();
-                // setChatSocket(null);
-                // setChatSocketReady(false);
             }
         }
     }, []);
@@ -58,8 +59,12 @@ export default function Room() {
                 setState(prevState => ({
                     messages: [...prevState.messages, data.message]
                 }))
-            } else {
-                console.log(data)
+            } else if (data.type === 'load_room') {
+                setRoom(data.room)
+                setState({
+                    ...state,
+                    messages: data.room.messages
+                })
             }
             
         };
@@ -68,10 +73,6 @@ export default function Room() {
             setChatSocketReady(false);
             setChatSocket(null);
             console.log('chatsocket closed');
-            // setTimeout(() => {
-            //     setChatSocket(new WebSocket(
-            //         `ws://${window.location.hostname}:8000/ws/chat/${room.slug}/?token=${token}`));
-            // }, 5000)
         };
 
         chatSocket.onerror = function (err) {
@@ -81,10 +82,10 @@ export default function Room() {
           };
           
         console.log('useEffect triggered')
+
+        // Cleanup function
         return () => {
             chatSocket.close();
-            // setChatSocket(null)
-            // setChatSocketReady(false)
         };
         
     }, [chatSocket])
@@ -102,6 +103,38 @@ export default function Room() {
         }))
         setState({...state, textToSend: ''})
         console.log("send")
+    }
+
+    async function leaveRoom() {
+        const url = `http://localhost:8000/rooms/${room.id}/leave_room/`
+        const csrftoken = getCookie('csrftoken');
+        const request = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json',
+                'X-CSRFToken': csrftoken,
+                'Authorization': `Token ${token}`
+            },
+        })
+        if (request.status === 204) {
+            navigate('../')
+        }
+    }
+
+    async function deleteRoom() {
+        const url = `http://localhost:8000/rooms/${room.id}/`
+        const csrftoken = getCookie('csrftoken');
+        const request = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json',
+                'X-CSRFToken': csrftoken,
+                'Authorization': `Token ${token}`
+            },
+        })
+        if (request.status === 204) {
+            navigate('../')
+        }
     }
 
     const messages = state.messages.map(msg => 
@@ -127,14 +160,14 @@ export default function Room() {
                 <Card.Header>
                     <Card.Title>
                         <h2 className='d-flex justify-content-between align-items-center'>
-                            {room.name}
+                            {!chatSocketReady ? <>Loading...</> : room.name}
                             <DropdownButton variant='dark' title="Actions" menuVariant='dark'>
-                                {room.current_users.includes(userId)
-                                    ? <Dropdown.Item>Leave Room</Dropdown.Item>
+                                {!!room.current_users && room.current_users.includes(userId)
+                                    ? <Dropdown.Item onClick={leaveRoom}>Leave Room</Dropdown.Item>
                                     : <></>
                                 }
-                                {room.host.username === username
-                                    ? <Dropdown.Item>Delete Room</Dropdown.Item>
+                                {!!room.host && room.host.username === username
+                                    ? <Dropdown.Item onClick={deleteRoom}>Delete Room</Dropdown.Item>
                                     : <></>
                                 }
                             </DropdownButton>

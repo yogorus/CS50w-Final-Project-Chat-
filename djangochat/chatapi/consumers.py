@@ -25,11 +25,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             user = await self.get_user(self.scope['user'])
 
             await self.accept()
-            await self.send(json.dumps({"type": 'current_user', 'user': user}))
+            # await self.send(json.dumps({"type": 'current_user', 'user': user}))
+            
             # Send chat history
             # room = await self.get_room_model(self.room_name)
             # messages = await self.get_room_messages(room)
-            # await self.send(json.dumps({'type': 'load_messages', 'messages': messages}))
+            # Load room
+            await self.send(json.dumps({'type': 'load_room', 'room': await self.serialize_room(self.room)}))
         
 
     async def disconnect(self, close_code):
@@ -96,6 +98,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_room_model(self, slug):
         return get_object_or_404(Room, slug=slug)
+    
+    @database_sync_to_async
+    def serialize_room(self, model):
+        return RoomSerializer(instance=model).data
 
         
 
