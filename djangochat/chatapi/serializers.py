@@ -4,27 +4,11 @@ from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import login, authenticate
 
-# HyperlinkedModelSerializer
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'groups'] # add urls later
-
-
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Group
-        fields = ['url', 'name']
-
-
-class LoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(write_only=True, required=True)
-    password = serializers.CharField(write_only=True, required=True)
-    
-    class Meta:
-        model = User
-        fields = ['username', 'password']
-
+        fields = ['username', 'email', 'groups'] 
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -58,34 +42,6 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ('__all__')
-        # exclude = ['user']
-
-    # def validate_user(self, user):
-    #     try:
-    #        user = User.objects.get(pk=user.id)
-        
-    #     except User.DoesNotExist:
-    #         raise serializers.ValidationError('user does not exists')
-        
-    #     return user
-    # def validate(self, attrs):
-    #     try:
-    #         user = User.objects.get(pk=attrs["user"].id)
-        
-    #     except User.DoesNotExist:
-    #         raise serializers.ValidationError({'error': 'user does not exists'})
-        
-    #     if not attrs['text']:
-    #         raise serializers.ValidationError({"error": "no text"})
-        
-    #     if not attrs['room']:
-    #         raise serializers.ValidationError({"error": "room id is not provided"})
-
-    #     return attrs
-
-    # def create(self, **validated_data):
-    #     user = User.objects.get(pk=validated_data['user'].id)
-    #     message = Message.objects.create(**validated_data, user=user)
 
 
 class RoomSerializer(serializers.ModelSerializer):

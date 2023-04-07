@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import getCookie from '../utils/getCookie';
 import Layout from './Layout';
-import { Button, Card, CardGroup, Container, Row, Col } from 'react-bootstrap';
+import { Button, Card, Container, Row, Col } from 'react-bootstrap';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,6 @@ export default function Home() {
     const userId = JSON.parse(window.localStorage.getItem('user_id'));
     const token = JSON.parse(window.localStorage.getItem('token'));
 
-    
     const [myRooms, setMyRooms] = useState(true)
     const [searchQuery, setSearchQuery] = useState("")
 
@@ -73,7 +72,8 @@ export default function Home() {
                     </Card.Subtitle>
                 </Card.Header>
                 <Card.Body className='p-2'>
-                    {room.messages.length > 0 ?
+                    {room.messages.length > 0
+                        ?
                         <>
                             <Card.Subtitle>Last Message:</Card.Subtitle>
                             <Card.Text className='last-message'>
@@ -111,11 +111,10 @@ export default function Home() {
         autoFocus
         />
       </InputGroup>            
-            {/* <h1>My rooms</h1> */}
             <Container fluid>
                 <Row className='align-items-center'>
                     {
-                    rooms.length > 0 ? rooms : <h1>Not found...</h1>
+                    rooms.length > 0 ? rooms : <h1>No Rooms...</h1>
                     }
                 </Row>
             </Container>

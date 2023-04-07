@@ -161,7 +161,7 @@ export default function Room() {
                     <Card.Title>
                         <h2 className='d-flex justify-content-between align-items-center'>
                             {!chatSocketReady ? <>Loading...</> : room.name}
-                            <DropdownButton variant='dark' title="Actions" menuVariant='dark'>
+                            <DropdownButton variant='dark' menuVariant='dark'>
                                 {!!room.current_users && room.current_users.includes(userId)
                                     ? <Dropdown.Item onClick={leaveRoom}>Leave Room</Dropdown.Item>
                                     : <></>
@@ -195,7 +195,7 @@ export default function Room() {
                     </Form>
                 </Card.Body>
             </Card>
-            <button onClick={() => console.log(state)}>Click to check state</button>
+            {/* <button onClick={() => console.log(state)}>Click to check state</button> */}
         </Layout>
     )
 }
@@ -207,7 +207,7 @@ const ScrollToBottom = () => {
         behavior: "auto",
         block: "nearest",
         inline: "start"
-    }));
+    }), []);
     return <div ref={bottomRef} />;
 };
 

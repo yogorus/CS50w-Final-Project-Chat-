@@ -1,17 +1,13 @@
 import json
 
 from .serializers import UserSerializer, MessageSerializer, RoomSerializer
-from .models import Room, Message
-
-from rest_framework.exceptions import ValidationError
+from .models import Room
 
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import AnonymousUser
-from django.core import serializers
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from rest_framework.authtoken.models import Token
-from urllib.parse import parse_qsl
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -22,14 +18,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if self.scope["user"].is_authenticated and await self.user_in_room():
             # Join room group
             await self.channel_layer.group_add(self.room_group_name, self.channel_name)
-            user = await self.get_user(self.scope['user'])
 
             await self.accept()
-            # await self.send(json.dumps({"type": 'current_user', 'user': user}))
             
-            # Send chat history
-            # room = await self.get_room_model(self.room_name)
-            # messages = await self.get_room_messages(room)
             # Load room
             await self.send(json.dumps({'type': 'load_room', 'room': await self.serialize_room(self.room)}))
         
