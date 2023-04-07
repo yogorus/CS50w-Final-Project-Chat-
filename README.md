@@ -65,6 +65,6 @@ this is the files for this app's React Components
 
 # Installation
 1. Go to root folder of project
-2. Run "docker-compose-up -d" in the terminal
+2. Run "docker-compose up -d" in the terminal
 3. When build is completed run "docker-compose exec web python manage.py migrate" to apply migrations(or go inside of the web container and run migrate command there)
 4. Go to localhost:3000 to use the app
