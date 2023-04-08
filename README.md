@@ -1,6 +1,8 @@
 # Final Project
 Real-time chat application built with *Django, Django Rest Framework, Django Channels, Bootstrap, React* and some additional libraries (e.g auto slug field for django models, Django CORS headers, React Router DOM for React URL routing, React-Bootstrap)
 
+Video demonstration: https://youtu.be/n4q5uGD6GnM
+
 # Distinctiveness and Complexity
 This project is **complex** and **distinct** *from others*, why?
 - It utilizes *DRF* to manipualte serialized data on the backend
